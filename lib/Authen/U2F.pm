@@ -20,6 +20,13 @@ use Crypt::PK::ECC;
 use Digest::SHA qw(sha256);
 use JSON qw(decode_json);
 
+use parent 'Exporter::Tiny';
+our @EXPORT_OK = qw(u2f_challenge u2f_registration_verify u2f_signature_verify);
+
+sub u2f_challenge           { __PACKAGE__->challenge(@_) }
+sub u2f_registration_verify { __PACKAGE__->registration_verify(@_) }
+sub u2f_signature_verify    { __PACKAGE__->signature_verify(@_) }
+
 sub challenge {
   state $check = compile(
     ClassName,

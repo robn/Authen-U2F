@@ -126,4 +126,78 @@ sub registration_verify {
   return ($enc_handle, $enc_key);
 }
 
+sub signature_verify {
+  state $check = compile(
+    ClassName,
+    slurpy Dict[
+      challenge      => Str,
+      app_id         => Str,
+      origin         => Str,
+      key_handle     => Str,
+      key            => Str,
+      signature_data => Str,
+      client_data    => Str,
+    ],
+  );
+  my ($class, $args) = $check->(@_);
+
+  my $key = decode_base64url($args->{key});
+  croak "couldn't decode key; not valid Base64-URL?"
+    unless $key;
+
+  my $pkec = Crypt::PK::ECC->new;
+  try {
+    $pkec->import_key_raw($key, "nistp256");
+  }
+  catch {
+    croak "invalid key argument (parse failure: $_)";
+  };
+
+  my $client_data = decode_base64url($args->{client_data});
+  croak "couldn't decode client data; not valid Base64-URL?"
+    unless $client_data;
+
+  {
+    my $data = decode_json($client_data);
+    croak "invalid client data (challenge doesn't match)"
+      unless $data->{challenge} eq $args->{challenge};
+    croak "invalid client data (origin doesn't match)"
+      unless $data->{origin} eq $args->{origin};
+  }
+
+  my $sign_data = decode_base64url($args->{signature_data});
+  croak "couldn't decode signature data; not valid Base64-URL?"
+    unless $sign_data;
+
+  # $sig_data is packed like so
+  #
+  # 1-byte  user presence
+  # 4-byte  counter (big-endian)
+  #         signature
+
+  my ($presence, $counter, $sig) = unpack 'a N a*', $sign_data;
+
+  # XXX presence check
+
+  # XXX counter check
+
+  # signature data. sha256 of:
+  #
+  # 32-byte sha256(app ID)                      (application parameter)
+  # 1-byte  user presence
+  # 4-byte  counter (big endian)
+  # 32-byte sha256(client data (JSON-encoded))  (challenge parameter)
+
+  my $app_id_sha = sha256($args->{app_id});
+  my $challenge_sha = sha256($client_data);
+
+  my $sigdata = pack "a32 a N a32", $app_id_sha, $presence, $counter, $challenge_sha;
+  my $sigdata_sha = sha256($sigdata);
+
+  $pkec->verify_hash($sig, $sigdata_sha)
+    or croak "invalid signature data (signature verification failed)";
+
+  return;
+}
+
 1;

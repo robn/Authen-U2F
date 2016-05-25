@@ -15,7 +15,8 @@ use Carp qw(croak);
 
 use Math::Random::Secure qw(irand);
 use MIME::Base64 qw(encode_base64url decode_base64url);
-use Crypt::OpenSSL::X509;
+use Crypt::OpenSSL::X509 1.806;
+use CryptX 0.034;
 use Crypt::PK::ECC;
 use Digest::SHA qw(sha256);
 use JSON qw(decode_json);

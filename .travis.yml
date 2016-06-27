@@ -14,9 +14,6 @@ perl:
 matrix:
    allow_failures:
       - perl: '5.8'
-      - perl: '5.10'
-      - perl: '5.12'
-      - perl: '5.24'
       - perl: 'blead'
    fast_finish: true
 before_install:

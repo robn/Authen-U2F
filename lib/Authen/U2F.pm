@@ -14,7 +14,7 @@ use Try::Tiny;
 use Carp qw(croak);
 
 use Math::Random::Secure qw(irand);
-use MIME::Base64 qw(encode_base64url decode_base64url);
+use MIME::Base64 3.11 qw(encode_base64url decode_base64url);
 use Crypt::OpenSSL::X509 1.806;
 use CryptX 0.034;
 use Crypt::PK::ECC;

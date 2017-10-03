@@ -2,8 +2,6 @@
 use strict;
 use warnings;
 
-use 5.010;
-
 use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
@@ -14,7 +12,7 @@ my %WriteMakefileArgs = (
   },
   "DISTNAME" => "Authen-U2F",
   "LICENSE" => "perl",
-  "MIN_PERL_VERSION" => "5.010",
+  "MIN_PERL_VERSION" => "5.008",
   "NAME" => "Authen::U2F",
   "PREREQ_PM" => {
     "Carp" => 0,

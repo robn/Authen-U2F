@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+0.003     2017-10-04 10:14:15+11:00 Australia/Melbourne
  - Support for Perl 5.8 (thanks Michael McClimon)
  - Use namespace::autoclean instead of namespace::sweep
 

@@ -5,7 +5,7 @@ package Authen::U2F;
 use warnings;
 use strict;
 
-use namespace::sweep;
+use namespace::autoclean;
 
 use Types::Standard -types, qw(slurpy);
 use Type::Params qw(compile);

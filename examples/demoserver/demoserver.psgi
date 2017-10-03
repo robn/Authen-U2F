@@ -172,7 +172,7 @@ my $finish_u2f_app = sub {
 
   my $key_handle = $req->parameters->{keyHandle};
 
-  my ($handle, $key) = u2f_signature_verify(
+  u2f_signature_verify(
     challenge         => $session->{challenge},
     app_id            => $app_id,
     origin            => $app_id,

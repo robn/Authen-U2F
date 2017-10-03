@@ -1,6 +1,5 @@
 #!/usr/bin/env plackup
 
-use 5.010;
 use warnings;
 use strict;
 
@@ -25,9 +24,10 @@ my $base_app = sub {
   return $req->new_response(404)->finalize unless $file && -r "$file.html.tt2";
 
   my $template = do { local (@ARGV, $/) = ("$file.html.tt2"); <> };
+  my $u2f = defined $env->{u2f} ? $env->{u2f} : {};
   $t->process(\$template, {
     %$session,
-    u2f => $env->{u2f} // {},
+    u2f => $u2f,
   }, \my $output) || die $t->error;
 
   my $res = $req->new_response(200);

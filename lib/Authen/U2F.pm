@@ -223,7 +223,7 @@ __END__
 
 =head1 NAME
 
-Authen-U2F - FIDO U2F library
+Authen::U2F - FIDO U2F library
 
 =head1 SYNOPSIS
 
